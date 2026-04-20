@@ -21,8 +21,8 @@
             {{ editMode ? 'Modifier le Bloc' : 'Ajouter un nouveau Bloc' }}
           </h5>
 
-          <!-- Nom du bloc -->
           <div class="row g-3 mb-4">
+            <!-- Nom du bloc -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">Nom du Bloc</label>
               <input
@@ -31,6 +31,26 @@
                 class="form-control form-control-lg"
                 placeholder="Ex: Bloc A, Bloc Nord..."
               />
+            </div>
+
+            <!-- Sélection Foyer -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-house me-1 text-primary"></i>Foyer
+              </label>
+              <select v-model="selectedFoyerId" class="form-select form-select-lg">
+                <option value="" disabled>-- Sélectionner un foyer --</option>
+                <option
+                  v-for="foyer in foyers"
+                  :key="foyer.idFoyer"
+                  :value="foyer.idFoyer"
+                >
+                  🏠 {{ foyer.nomFoyer }} (Capacité : {{ foyer.capaciteFoyer }})
+                </option>
+              </select>
+              <div v-if="foyers.length === 0" class="text-danger small mt-1">
+                <i class="bi bi-exclamation-triangle me-1"></i>Aucun foyer disponible
+              </div>
             </div>
           </div>
 
@@ -45,13 +65,11 @@
               </button>
             </div>
 
-            <!-- Aucune chambre -->
             <div v-if="chambres.length === 0" class="empty-chambres text-center py-3">
               <i class="bi bi-door-closed text-muted fs-3"></i>
               <p class="text-muted mb-0 mt-1 small">Aucune chambre ajoutée</p>
             </div>
 
-            <!-- Liste des chambres à saisir -->
             <div
               v-for="(chambre, index) in chambres"
               :key="index"
@@ -77,23 +95,20 @@
                 </select>
               </div>
               <div class="col-md-3 d-flex align-items-end">
-                <button
-                  class="btn btn-outline-danger btn-sm w-100"
-                  @click="removeChambreRow(index)"
-                >
+                <button class="btn btn-outline-danger btn-sm w-100" @click="removeChambreRow(index)">
                   <i class="bi bi-trash me-1"></i>Retirer
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Boutons actions -->
+          <!-- Boutons -->
           <div class="d-flex gap-2">
             <button
               class="btn btn-lg px-5"
               :class="editMode ? 'btn-warning' : 'btn-primary'"
               @click="editMode ? updateBloc() : addBloc()"
-              :disabled="loading || !nomBloc.trim()"
+              :disabled="loading || !nomBloc.trim() || !selectedFoyerId"
             >
               <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
               <i v-else :class="editMode ? 'bi bi-check-lg' : 'bi bi-plus-lg'" class="me-2"></i>
@@ -114,7 +129,7 @@
         </div>
       </div>
 
-      <!-- ────── STATS ────── -->
+      <!-- ────── STATS + LISTE ────── -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="mb-0 fw-bold text-secondary">
           <i class="bi bi-grid me-2"></i>
@@ -126,25 +141,24 @@
         </button>
       </div>
 
-      <!-- ────── LOADING ────── -->
+      <!-- Loading -->
       <div v-if="loadingBlocs" class="text-center py-5">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
         <p class="mt-3 text-muted">Chargement des blocs...</p>
       </div>
 
-      <!-- ────── LISTE VIDE ────── -->
+      <!-- Liste vide -->
       <div v-else-if="blocs.length === 0" class="empty-state text-center py-5">
         <i class="bi bi-inbox display-1 text-muted"></i>
         <h5 class="mt-3 text-muted">Aucun bloc disponible</h5>
         <p class="text-muted">Commencez par ajouter un bloc ci-dessus.</p>
       </div>
 
-      <!-- ────── CARDS BLOCS ────── -->
+      <!-- Liste des blocs -->
       <div v-else class="row g-4">
         <div v-for="bloc in blocs" :key="bloc.idBloc" class="col-sm-6 col-md-4 col-lg-4">
           <div class="card bloc-card h-100" :class="{ 'editing': selectedBlocId === bloc.idBloc }">
             <div class="card-body d-flex flex-column">
-
               <!-- Header -->
               <div class="d-flex align-items-center mb-3">
                 <div class="bloc-icon me-3">
@@ -157,8 +171,10 @@
               </div>
 
               <!-- Foyer -->
-              <div v-if="bloc.foyer" class="info-badge mb-2">
-                <i class="bi bi-house me-1"></i>{{ bloc.foyer.nomFoyer }}
+              <div v-if="bloc.foyer" class="foyer-badge mb-3">
+                <i class="bi bi-house-fill me-1"></i>
+                {{ bloc.foyer.nomFoyer }}
+                <span class="ms-2 text-muted small">({{ bloc.foyer.capaciteFoyer }} places)</span>
               </div>
 
               <!-- Résumé chambres -->
@@ -180,12 +196,9 @@
                 </div>
               </div>
 
-              <!-- Toggle liste chambres -->
+              <!-- Toggle chambres -->
               <div v-if="bloc.chambres && bloc.chambres.length > 0">
-                <button
-                  class="btn btn-link btn-sm p-0 text-primary mb-2"
-                  @click="toggleChambres(bloc.idBloc)"
-                >
+                <button class="btn btn-link btn-sm p-0 text-primary mb-2" @click="toggleChambres(bloc.idBloc)">
                   <i :class="showChambres[bloc.idBloc] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'" class="me-1"></i>
                   {{ showChambres[bloc.idBloc] ? 'Masquer' : 'Voir' }} les chambres
                 </button>
@@ -202,7 +215,7 @@
                 <i class="bi bi-info-circle me-1"></i>Aucune chambre
               </div>
 
-              <!-- Boutons -->
+              <!-- Boutons actions -->
               <div class="mt-auto pt-3 d-flex gap-2">
                 <button class="btn btn-warning btn-sm w-50" @click="startEdit(bloc)">
                   <i class="bi bi-pencil me-1"></i>Modifier
@@ -211,7 +224,6 @@
                   <i class="bi bi-trash me-1"></i>Supprimer
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -230,8 +242,10 @@ export default {
   data() {
     return {
       blocs: [],
+      foyers: [],
       nomBloc: '',
-      chambres: [],        // ← liste des chambres du formulaire
+      selectedFoyerId: '',
+      chambres: [],
       loading: false,
       loadingBlocs: false,
       errorMessage: '',
@@ -244,32 +258,20 @@ export default {
 
   mounted() {
     this.loadBlocs()
+    this.loadFoyers()
   },
 
   methods: {
-
-    // ── Ajouter une ligne chambre dans le formulaire ──
-    addChambreRow() {
-      this.chambres.push({ numeroChambre: null, type: '' })
-    },
-
-    // ── Retirer une ligne chambre ──
-    removeChambreRow(index) {
-      this.chambres.splice(index, 1)
-    },
-
-    // ── Valider les chambres ──
-    validateChambres() {
-      for (const c of this.chambres) {
-        if (!c.numeroChambre || !c.type) {
-          this.showError('Veuillez remplir tous les champs de chaque chambre.')
-          return false
-        }
+    async loadFoyers() {
+      try {
+        const response = await blocService.getAllFoyers()
+        this.foyers = response.data
+      } catch (error) {
+        console.error('Erreur chargement foyers :', error)
+        this.showError('Impossible de charger les foyers.')
       }
-      return true
     },
 
-    // ── Charger tous les blocs ──
     async loadBlocs() {
       this.loadingBlocs = true
       try {
@@ -282,75 +284,117 @@ export default {
       }
     },
 
-    // ── Ajouter un bloc avec ses chambres ──
+    addChambreRow() {
+      this.chambres.push({ numeroChambre: null, type: '' })
+    },
+
+    removeChambreRow(index) {
+      this.chambres.splice(index, 1)
+    },
+
+    validateChambres() {
+      for (const c of this.chambres) {
+        if (!c.numeroChambre || !c.type) {
+          this.showError('Veuillez remplir tous les champs de chaque chambre.')
+          return false
+        }
+      }
+      return true
+    },
+
+    // Nettoyage des chambres avant envoi (recommandé)
+    cleanChambresForPayload(chambres) {
+      return chambres.map(ch => ({
+        numeroChambre: ch.numeroChambre,
+        type: ch.type
+      }))
+    },
+
+    // ── Ajouter un bloc ──
     async addBloc() {
-      if (!this.nomBloc.trim()) return
+      if (!this.nomBloc.trim() || !this.selectedFoyerId) return
       if (!this.validateChambres()) return
 
       this.loading = true
       this.clearMessages()
+
       try {
         const payload = {
           nomBloc: this.nomBloc,
-          chambres: this.chambres
+          foyer: { idFoyer: this.selectedFoyerId },
+          chambres: this.cleanChambresForPayload(this.chambres)
         }
+
         await blocService.addBloc(payload)
-        this.nomBloc = ''
-        this.chambres = []
+        this.resetForm()
         this.showSuccess('Bloc ajouté avec succès !')
         await this.loadBlocs()
       } catch (error) {
+        console.error(error)
         this.showError('Erreur lors de l\'ajout du bloc.')
       } finally {
         this.loading = false
       }
     },
 
-    // ── Démarrer modification ──
-    startEdit(bloc) {
-      this.editMode = true
-      this.selectedBlocId = bloc.idBloc
-      this.nomBloc = bloc.nomBloc
-      // Copier les chambres existantes dans le formulaire
-      this.chambres = bloc.chambres
-        ? bloc.chambres.map(c => ({ numeroChambre: c.numeroChambre, type: c.type }))
-        : []
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    },
-
-    // ── Annuler modification ──
-    cancelEdit() {
-      this.editMode = false
-      this.selectedBlocId = null
-      this.nomBloc = ''
-      this.chambres = []
-      this.clearMessages()
-    },
-
     // ── Modifier un bloc ──
     async updateBloc() {
-      if (!this.nomBloc.trim()) return
+      if (!this.nomBloc.trim() || !this.selectedFoyerId) return
       if (!this.validateChambres()) return
 
       this.loading = true
       this.clearMessages()
+
       try {
         const payload = {
+          idBloc: this.selectedBlocId,
           nomBloc: this.nomBloc,
-          chambres: this.chambres
+          foyer: { idFoyer: this.selectedFoyerId },
+          chambres: this.cleanChambresForPayload(this.chambres)
         }
+
         await blocService.updateBloc(this.selectedBlocId, payload)
         this.showSuccess('Bloc modifié avec succès !')
         this.cancelEdit()
         await this.loadBlocs()
       } catch (error) {
+        console.error(error)
         this.showError('Erreur lors de la modification du bloc.')
       } finally {
         this.loading = false
       }
     },
 
-    // ── Supprimer un bloc ──
+    // ── Édition ──
+    startEdit(bloc) {
+      this.editMode = true
+      this.selectedBlocId = bloc.idBloc
+      this.nomBloc = bloc.nomBloc
+      this.selectedFoyerId = bloc.foyer ? bloc.foyer.idFoyer : ''
+
+      this.chambres = bloc.chambres
+        ? bloc.chambres.map(c => ({
+            numeroChambre: c.numeroChambre,
+            type: c.type
+          }))
+        : []
+
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+
+    cancelEdit() {
+      this.editMode = false
+      this.selectedBlocId = null
+      this.resetForm()
+      this.clearMessages()
+    },
+
+    resetForm() {
+      this.nomBloc = ''
+      this.selectedFoyerId = ''
+      this.chambres = []
+    },
+
     async deleteBloc(id) {
       if (!confirm('Voulez-vous vraiment supprimer ce bloc ?')) return
       try {
@@ -371,17 +415,24 @@ export default {
     },
 
     getTypeBadgeClass(type) {
-      return { SIMPLE: 'badge-type badge-simple', DOUBLE: 'badge-type badge-double', TRIPLE: 'badge-type badge-triple' }[type] || 'badge bg-secondary'
+      const classes = {
+        SIMPLE: 'badge-type badge-simple',
+        DOUBLE: 'badge-type badge-double',
+        TRIPLE: 'badge-type badge-triple'
+      }
+      return classes[type] || 'badge bg-secondary'
     },
 
     showError(msg) {
       this.errorMessage = msg
       setTimeout(() => { this.errorMessage = '' }, 4000)
     },
+
     showSuccess(msg) {
       this.successMessage = msg
       setTimeout(() => { this.successMessage = '' }, 3000)
     },
+
     clearMessages() {
       this.errorMessage = ''
       this.successMessage = ''
@@ -414,7 +465,11 @@ export default {
   padding: 0.5rem;
 }
 
-/* Section chambres dans le formulaire */
+.form-select:focus, .form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26,115,232,0.15);
+}
+
 .chambres-section {
   background: #f8f9fa;
   border-radius: 12px;
@@ -435,7 +490,6 @@ export default {
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
-/* Cards blocs */
 .bloc-card {
   border: none;
   border-radius: 16px;
@@ -462,12 +516,13 @@ export default {
   font-size: 1.4rem; color: #1a73e8;
 }
 
-.info-badge {
-  background: #f0f4f8;
+.foyer-badge {
+  background: linear-gradient(135deg, #e8f0fe, #d0e4ff);
+  color: #1a73e8;
   border-radius: 8px;
-  padding: 4px 10px;
-  font-size: 0.82rem;
-  color: #555;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
   display: inline-block;
 }
 
