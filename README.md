@@ -1,48 +1,43 @@
-# frontend_hebergement
+# University Accommodation Management Platform
 
-This template should help get you started developing with Vue 3 in Vite.
+## 📌 Description
 
-## Recommended IDE Setup
+This project involves designing and developing a complete information system dedicated to managing university residences.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+The main objective is to digitize the administrative processes related to accommodation. The system should streamline room allocation, monitor building capacity, and centralize student reservations.
+---
 
-## Recommended Browser Setup
+## 🛠️ Technologies
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- Vue.js 3
+- TypeScript
+- Axios
+- Bootstrap 5
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 🔗 Backend Repository
 
-## Customize configuration
+- Spring Boot REST API:  
+https://github.com/rahmabenhdhili/backend_hebergement
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## 👥 Contributors
+- [Rania Mrad Namji ](https://github.com/raniaMrad123)  
+- [Rahma Ben Hdhili](https://github.com/rahmabenhdhili)  
+- [Ahlem Ben Abdallah ](https://github.com/ahlembenabdallah54)  
+- [Islem Labidi](https://github.com/islemlabidi0)  
 
-```sh
+---
+
+## 🚀 Features
+
+
+---
+
+## 📦 Setup Instructions
+
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
