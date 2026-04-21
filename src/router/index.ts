@@ -3,7 +3,6 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import Etudiant from '../components/etudiant/getAllEtudiants.vue';
 import CreateEtudiant from '../components/etudiant/AddEtudiant.vue';
 import EditEtudiant from '../components/etudiant/UpdateEtudiant.vue';
-import type { RouteRecordRaw } from 'vue-router'
 import BlocView from '../views/BlocView.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -29,14 +28,14 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/universites'
   },
 
-  // Routes Bloc (de ton ami)
+  // Routes Bloc 
   {
     path: '/blocs',
     name: 'blocs',
     component: BlocView
   },
 
-  // Routes Universités (les tiennes)
+  // Routes Universités
   {
     path: '/universites',
     name: 'universites',

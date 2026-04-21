@@ -62,13 +62,17 @@
 
           <!-- École -->
           <div class="mb-4">
-            <label class="form-label fw-semibold">École</label>
-            <input
-              v-model="form.ecole"
-              class="form-control"
-              placeholder="École"
-              required
-            />
+            <select v-model="form.universite" class="form-control" required>
+              <option disabled value="">-- Choisir une université --</option>
+
+              <option
+                v-for="u in universites"
+                :key="u.idUniversite"
+                :value="u"
+              >
+                {{ u.nomUniversite }}
+              </option>
+            </select>
           </div>
 
           <!-- Button -->
@@ -119,15 +123,21 @@
 import { ref, watch, onMounted } from "vue";
 import { createEtudiant } from "../../services/etudiantServices";
 import type { Etudiant } from "../../models/Etudiant";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { Modal } from "bootstrap";
+import { getAllUniversites } from "../../services/universiteServices";
+import type { Universite } from "@/models/Universite";
 
 const router = useRouter();
+
 // emit
 const emit = defineEmits<{
   (e: "refresh"): void;
 }>();
+
+// universités list
+const universites = ref<Universite[]>([]);
 
 // form
 const form = ref<Etudiant>({
@@ -135,7 +145,7 @@ const form = ref<Etudiant>({
   nom: "",
   prenom: "",
   dateNaissance: "",
-  ecole: ""
+  universite: undefined
 });
 
 // CIN error
@@ -148,11 +158,14 @@ let modalInstance: Modal | null = null;
 const modalMessage = ref("");
 const modalType = ref<"success" | "error">("success");
 
-// INIT MODAL (IMPORTANT FIX)
-onMounted(() => {
+// INIT
+onMounted(async () => {
   if (modalRef.value) {
     modalInstance = new Modal(modalRef.value);
   }
+
+  const res = await getAllUniversites();
+  universites.value = res.data;
 });
 
 // CIN validation
@@ -184,18 +197,24 @@ watch(
   }
 );
 
-// show modal
+// modal
 const showModal = (type: "success" | "error", message: string) => {
   modalType.value = type;
   modalMessage.value = message;
 
   modalInstance?.show();
+
   router.push("/listEtudiants");
 };
 
 // save
 const save = async () => {
   if (!validateCin()) return;
+
+  if (!form.value.universite) {
+    showModal("error", "Veuillez choisir une université");
+    return;
+  }
 
   try {
     const res = await createEtudiant(form.value);
@@ -209,10 +228,9 @@ const save = async () => {
     reset();
     emit("refresh");
 
-    showModal("success", "Étudiant ajouté avec succès ");
+    showModal("success", "Étudiant ajouté avec succès");
   } catch (error) {
-    showModal("error", "Erreur serveur ");
-
+    showModal("error", "Erreur serveur");
   }
 };
 
@@ -223,7 +241,7 @@ const reset = () => {
     nom: "",
     prenom: "",
     dateNaissance: "",
-    ecole: ""
+    universite: undefined
   };
 };
 </script>

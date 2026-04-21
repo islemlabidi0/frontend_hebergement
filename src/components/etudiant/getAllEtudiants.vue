@@ -49,7 +49,7 @@
                 <td>{{ e.nom }}</td>
                 <td>{{ e.prenom }}</td>
                 <td>{{ formatDate(e.dateNaissance) }}</td>
-                <td>{{ e.ecole }}</td>
+                <td>{{ e.universite?.nomUniversite }}</td>
 
                 <td>
 
@@ -154,28 +154,29 @@ import { Modal } from "bootstrap";
 const etudiants = ref<Etudiant[]>([]);
 const loading = ref(false);
 
-// modal
+// modals
 const deleteModalRef = ref<HTMLElement | null>(null);
-const selectedCin = ref<number | null>(null);
-let modalInstance: Modal | null = null;
-
 const successModalRef = ref<HTMLElement | null>(null);
+
+let deleteModal: Modal | null = null;
 let successModal: Modal | null = null;
+
+const selectedCin = ref<number | null>(null);
 
 // load
 const load = async () => {
+  loading.value = true;
   try {
-    loading.value = true;
     etudiants.value = await getAllEtudiants();
   } finally {
     loading.value = false;
   }
 };
 
-// open modal
+// open delete modal
 const openDeleteModal = (cin: number) => {
   selectedCin.value = cin;
-  modalInstance?.show();
+  deleteModal?.show();
 };
 
 // confirm delete
@@ -190,10 +191,10 @@ const confirmDelete = async () => {
       return;
     }
 
-    modalInstance?.hide();
+    deleteModal?.hide();
     await load();
-    successModal?.show();
 
+    successModal?.show();
     selectedCin.value = null;
 
   } catch (error) {
@@ -205,15 +206,11 @@ const confirmDelete = async () => {
 const formatDate = (date: string) => {
   return date ? date.split("T")[0] : "";
 };
-const showSuccessModal = () => {
-  if (successModalRef.value) {
-    successModal = new Modal(successModalRef.value);
-    successModal.show();
-  }
-};
+
+// init modals
 onMounted(() => {
   if (deleteModalRef.value) {
-    modalInstance = new Modal(deleteModalRef.value);
+    deleteModal = new Modal(deleteModalRef.value);
   }
 
   if (successModalRef.value) {

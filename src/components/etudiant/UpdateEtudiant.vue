@@ -23,14 +23,20 @@
           <input v-model="form.dateNaissance" type="date" class="form-control mb-3" disabled />
 
           <!-- ONLY editable -->
-          <input
-            v-model="form.ecole"
-            class="form-control mb-4"
-            placeholder="École"
-          />
+          <select v-model="form.universite" class="form-control mb-4">
+            <option disabled value="">-- Choisir une université --</option>
+
+            <option
+              v-for="u in universites"
+              :key="u.idUniversite"
+              :value="u"
+            >
+              {{ u.nomUniversite }}
+            </option>
+          </select>
 
           <button class="btn btn-warning w-100">
-            Mettre à jour l'école
+            Mettre à jour l'université
           </button>
 
         </form>
@@ -73,10 +79,12 @@ import { useRoute, useRouter } from "vue-router";
 import { getEtudiant, updateEtudiant } from "../../services/etudiantServices";
 import type { Etudiant } from "../../models/Etudiant";
 import { Modal } from "bootstrap";
+import { getAllUniversites } from "../../services/universiteServices";
+import type { Universite } from "@/models/Universite";
 
 const route = useRoute();
 const router = useRouter();
-
+const universites = ref<Universite[]>([]);
 const successModalRef = ref<HTMLElement | null>(null);
 let successModal: Modal | null = null;
 
@@ -85,13 +93,20 @@ const form = ref<Etudiant>({
   nom: "",
   prenom: "",
   dateNaissance: "",
-  ecole: ""
+  universite: undefined
 });
 
 // load student
 const load = async () => {
   const cin = Number(route.params.cin);
-  form.value = await getEtudiant(cin);
+
+  const [etudiantRes, uniRes] = await Promise.all([
+    getEtudiant(cin),
+    getAllUniversites()
+  ]);
+
+  form.value = etudiantRes;
+  universites.value = uniRes.data;
 };
 
 // update only school
