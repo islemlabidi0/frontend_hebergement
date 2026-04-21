@@ -1,9 +1,28 @@
-// src/router/index.ts
-import { createRouter, createWebHistory } from 'vue-router'
+
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import Etudiant from '../components/etudiant/getAllEtudiants.vue';
+import CreateEtudiant from '../components/etudiant/AddEtudiant.vue';
+import EditEtudiant from '../components/etudiant/UpdateEtudiant.vue';
 import type { RouteRecordRaw } from 'vue-router'
 import BlocView from '../views/BlocView.vue'
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: "/listEtudiants",
+    name: "Etudiant",
+    component: Etudiant,
+  },
+  {
+    path: "/etudiants/create",
+    name: "CreateEtudiant",
+    component: CreateEtudiant,
+  },
+  {
+    path: "/etudiants/edit/:cin",
+    name: "EditEtudiant",
+    component: EditEtudiant,
+    props: true
+  },
   // Redirection par défaut vers la liste des universités
   {
     path: '/',
@@ -41,8 +60,8 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 })
 
 export default router
