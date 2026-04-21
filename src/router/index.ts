@@ -4,7 +4,7 @@ import Etudiant from '../components/etudiant/getAllEtudiants.vue';
 import CreateEtudiant from '../components/etudiant/AddEtudiant.vue';
 import EditEtudiant from '../components/etudiant/UpdateEtudiant.vue';
 import BlocView from '../views/BlocView.vue'
-
+import Foyer from "@/views/Foyer.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/listEtudiants",
@@ -33,6 +33,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/blocs',
     name: 'blocs',
     component: BlocView
+ 
+  },
+
+  {
+    path: "/foyer",
+    name: "Foyer",
+    component: Foyer
   },
 
   // Routes Universités
@@ -56,7 +63,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'affecter-foyer',
     component: () => import('../components/universite/AffecterFoyer.vue')
   }
+
 ]
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
