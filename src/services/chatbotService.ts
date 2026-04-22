@@ -10,15 +10,21 @@ export interface ChatResponse {
   response: string
 }
 
-/**
- * Sends the user's message to Spring Boot which calls Grok AI.
- * Returns the AI-generated response string.
- */
 export const sendChatMessage = async (message: string): Promise<string> => {
-  const { data } = await axios.post<ChatResponse>(
-    `${API_BASE_URL}/chatbot`,
-    { message } as ChatRequest,
-    { headers: { 'Content-Type': 'application/json' }, timeout: 30000 }
-  )
-  return data.response
+  try {
+    const { data } = await axios.post<ChatResponse>(
+      `${API_BASE_URL}/chatbot`,
+      { message },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 90000  // ← bumped to 90s to match Ollama response time
+      }
+    )
+
+    return data.response || "Aucune réponse reçue."
+
+  } catch (error) {
+    console.error("Erreur API chatbot:", error)
+    throw error
+  }
 }

@@ -14,7 +14,7 @@
             <i class="bi bi-stars"></i>
           </div>
           <h2 class="sidebar-title">Assistant PGHU</h2>
-          <p class="sidebar-sub">Propulsé par Grok AI</p>
+          <p class="sidebar-sub">Propulsé par Ollamma </p>
         </div>
 
         <div class="sidebar-section">
@@ -49,7 +49,7 @@
               <div class="topbar-name">Assistant Hébergement</div>
               <div class="topbar-status">
                 <span class="status-pulse"></span>
-                Grok AI · En ligne
+                 llama3.2:1b · Ollama
               </div>
             </div>
           </div>
