@@ -1,75 +1,93 @@
-
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import Etudiant from '../components/etudiant/getAllEtudiants.vue';
-import CreateEtudiant from '../components/etudiant/AddEtudiant.vue';
-import EditEtudiant from '../components/etudiant/UpdateEtudiant.vue';
+// src/router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import BlocView from '../views/BlocView.vue'
-import Foyer from "@/views/Foyer.vue";
+import Etudiant from '../components/etudiant/getAllEtudiants.vue'
+import CreateEtudiant from '../components/etudiant/AddEtudiant.vue'
+import EditEtudiant from '../components/etudiant/UpdateEtudiant.vue'
+import DashboardView from '../views/DashboardView.vue'
+
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/listEtudiants",
-    name: "Etudiant",
-    component: Etudiant,
-  },
-  {
-    path: "/etudiants/create",
-    name: "CreateEtudiant",
-    component: CreateEtudiant,
-  },
-  {
-    path: "/etudiants/edit/:cin",
-    name: "EditEtudiant",
-    component: EditEtudiant,
-    props: true
-  },
-  // Redirection par défaut vers la liste des universités
+
+  // ── Root redirect ───────────────────────────────────────────
   {
     path: '/',
-    redirect: '/universites'
+    redirect: '/dashboard'
   },
 
-  // Routes Bloc 
+  // ── Dashboard (SANS navbar) ─────────────────────────────────
   {
-    path: '/blocs',
-    name: 'blocs',
-    component: BlocView
- 
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView
   },
 
+  // ── Pages AVEC navbar (via MainLayout) ──────────────────────
   {
-    path: "/foyer",
-    name: "Foyer",
-    component: Foyer
-  },
+    path: '/',
+    component: () => import('../views/Mainlayout.vue'),
+    children: [
 
-  // Routes Universités
-  {
-    path: '/universites',
-    name: 'universites',
-    component: () => import('../components/universite/getAllUniversites.vue')
-  },
-  {
-    path: '/universites/add',
-    name: 'add-universite',
-    component: () => import('../components/universite/AddUniversite.vue')
-  },
-  {
-    path: '/universites/update/:id',
-    name: 'update-universite',
-    component: () => import('../components/universite/UpdateUniversite.vue')
-  },
-  {
-    path: '/universites/affecter-foyer/:id',
-    name: 'affecter-foyer',
-    component: () => import('../components/universite/AffecterFoyer.vue')
+      // Etudiants
+      {
+        path: 'listEtudiants',
+        name: 'Etudiant',
+        component: Etudiant
+      },
+      {
+        path: 'etudiants/create',
+        name: 'CreateEtudiant',
+        component: CreateEtudiant
+      },
+      {
+        path: 'etudiants/edit/:cin',
+        name: 'EditEtudiant',
+        component: EditEtudiant,
+        props: true
+      },
+
+      // Universites
+      {
+        path: 'universites',
+        name: 'universites',
+        component: () => import('../components/universite/getAllUniversites.vue')
+      },
+      {
+        path: 'universites/add',
+        name: 'add-universite',
+        component: () => import('../components/universite/AddUniversite.vue')
+      },
+      {
+        path: 'universites/update/:id',
+        name: 'update-universite',
+        component: () => import('../components/universite/UpdateUniversite.vue')
+      },
+      {
+        path: 'universites/affecter-foyer/:id',
+        name: 'affecter-foyer',
+        component: () => import('../components/universite/AffecterFoyer.vue')
+      },
+
+      // Foyers
+      {
+        path: 'foyers',
+        name: 'foyers',
+        component: () => import('../views/Foyer.vue')
+      },
+
+      // Blocs
+      {
+        path: 'blocs',
+        name: 'blocs',
+        component: BlocView
+      },
+    ]
   }
-
 ]
 
-
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  history: createWebHistory(),
+  routes
 })
 
 export default router
