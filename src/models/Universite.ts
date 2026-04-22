@@ -10,5 +10,5 @@ export interface Universite {
   idUniversite?: number
   nomUniversite: string
   adresse: string
-  foyer?: Foyer   // ⚠️ optionnel maintenant (le ? après foyer)
+  foyer?: Foyer   
 }

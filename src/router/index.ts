@@ -81,6 +81,13 @@ const routes: Array<RouteRecordRaw> = [
         name: 'blocs',
         component: BlocView
       },
+
+      // ✅ Chatbot — page dédiée dans le layout (avec navbar)
+      {
+        path: 'chatbot',           // ← No leading slash: becomes /chatbot
+        name: 'chatbot',
+        component: () => import('../components/chatbot/Chatbot.vue')
+      }
     ]
   }
 ]
