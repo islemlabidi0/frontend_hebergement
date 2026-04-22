@@ -20,11 +20,19 @@ export const updateUniversite = (universite: Universite) => {
   return axios.put<Universite>(`${API_URL}/update`, universite)
 }
 
-export const deleteUniversite = (id: number) => {
-  return axios.delete(`${API_URL}/delete/${id}`)
-}
+export const deleteUniversite = async (id: number) => {
+  try {
+    const response = await axios.delete(`${API_URL}/delete/${id}`)
+    return response
+  } catch (error: any) {
+    // Personnaliser le message d'erreur
+    if (error.response?.status === 409 || error.response?.data?.includes('foreign key')) {
+      throw new Error('Cette université est associée à des étudiants et ne peut pas être supprimée.')
+    }
+    throw error
+  }}
 
-// ✅ CORRIGÉ : appelle maintenant /universite/affecterFoyerAUniversite (pas /foyer/...)
+
 export const affecterFoyerAUniversite = (idFoyer: number, nomUniversite: string) => {
   return axios.put(
     `${API_URL}/affecterFoyerAUniversite`,
