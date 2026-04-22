@@ -149,7 +149,7 @@ const messagesEl = ref<HTMLElement | null>(null)
 const textareaEl = ref<HTMLTextAreaElement | null>(null)
 
 const suggestions = [
-  { icon: 'bi bi-house-heart-fill', text: 'Quel bloc est le plus calme ?' },
+  { icon: 'bi bi-house-heart-fill', text: 'Quel est le bloc le plus calme du foyer [nom du foyer] ?' },
   { icon: 'bi bi-moon-stars-fill',  text: 'Chambre simple pour étudier en paix' },
   { icon: 'bi bi-people-fill',      text: 'Chambres disponibles en ce moment ?' },
   { icon: 'bi bi-building-fill',    text: 'Quels foyers sont les plus proches ?' },
