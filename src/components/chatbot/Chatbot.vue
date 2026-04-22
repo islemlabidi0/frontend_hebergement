@@ -153,7 +153,7 @@ const suggestions = [
   { icon: 'bi bi-moon-stars-fill',  text: 'Chambre simple pour étudier en paix' },
   { icon: 'bi bi-people-fill',      text: 'Chambres disponibles en ce moment ?' },
   { icon: 'bi bi-building-fill',    text: 'Quels foyers sont les plus proches ?' },
-  { icon: 'bi bi-star-fill',        text: 'Meilleure chambre pour 1ère année' },
+  { icon: 'bi bi-star-fill',        text: 'Quel bloc est le plus bruyant ?' },
 ]
 
 const getTime = () =>
