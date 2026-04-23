@@ -17,7 +17,7 @@
           <div class="dash-badge-wrap">
             <div class="dash-stat-pill">
               <i class="bi bi-grid-3x3-gap-fill"></i>
-              3 Modules actifs
+              4 Modules actifs
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Cards -->
-      <div class="row g-4">
+      <div class="row g-4 justify-content-center">
 
         <!-- Etudiant -->
         <div class="col-12 col-md-4">
@@ -94,6 +94,32 @@
             </div>
           </div>
         </div>
+        <!-- Réservations -->
+         <div class="row g-4 justify-content-center mt-2"></div>
+          <div class="col-12 col-md-4 ">
+            <div class="dash-module-card" @click="$router.push('/reservations')">
+
+              <div class="dash-card-top blue">
+                <div class="dash-card-icon">
+                  <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <span class="dash-card-num">04</span>
+              </div>
+
+              <div class="dash-card-body">
+                <h3 class="dash-card-title">Reservation Management</h3>
+                <p class="dash-card-desc">
+                  Gérez les réservations, affectations et annulations des étudiants.
+                </p>
+
+                <router-link to="/reservations" class="dash-card-btn blue-btn">
+                  Accéder au module
+                  <i class="bi bi-arrow-right"></i>
+                </router-link>
+              </div>
+
+            </div>
+          </div>
 
       </div>
 
