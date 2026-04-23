@@ -81,6 +81,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'blocs',
         component: BlocView
       },
+      //Routes pour réservations
+      {
+        path: 'reservations',
+        name: 'reservations',
+        component: () => import('../components/Reservation/AddReservation.vue')
+      },
     ]
   }
 ]
