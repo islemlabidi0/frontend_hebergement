@@ -8,6 +8,11 @@ export interface Foyer {
   capaciteFoyer: number;
 }
 
+export interface Chambre {
+  numeroChambre: number;
+  type: "SIMPLE" | "DOUBLE" | "TRIPLE";
+}
+
 export const getAllFoyers = () =>
   axios.get<Foyer[]>(API_URL + "/all");
 
@@ -22,3 +27,8 @@ export const updateFoyer = (foyer: Foyer) =>
 
 export const deleteFoyer = (id: number) =>
   axios.delete(`${API_URL}/${id}`);
+
+export const getChambresDisponibles = (nomFoyer: string, type: string) =>
+  axios.get<Chambre[]>(`${API_URL}/chambresDisponibles`, {
+    params: { nomFoyer, type }
+  });
