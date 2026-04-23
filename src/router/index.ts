@@ -86,7 +86,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'reservations',
         name: 'reservations',
         component: () => import('../components/Reservation/AddReservation.vue')
-      },
+      },{
+        path: 'reservations/BYAU',
+        name: 'reservations-by-au',
+        component: () => import('../components/Reservation/GetReservationsByAU.vue')
+      }
     ]
   }
 ]
