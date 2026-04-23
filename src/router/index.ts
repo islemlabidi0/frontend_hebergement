@@ -75,6 +75,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Foyer.vue')
       },
 
+       {
+          path: 'chambres-disponibles',
+          name: 'chambres-disponibles',
+          component: () => import('../views/ChambresDisponiblesView.vue')
+},      
+
       // Blocs
       {
         path: 'blocs',
