@@ -101,10 +101,10 @@ const routes: Array<RouteRecordRaw> = [
         path: 'reservations',
         name: 'reservations-list',
         component: () => import('../components/Reservation/ReservationsList.vue')
-
-      // ✅ Chatbot — page dédiée dans le layout (avec navbar)
+      },
+      // Chatbot
       {
-        path: 'chatbot',           // ← No leading slash: becomes /chatbot
+        path: 'chatbot',
         name: 'chatbot',
         component: () => import('../components/chatbot/Chatbot.vue')
       }

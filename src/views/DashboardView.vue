@@ -36,7 +36,7 @@
       <div class="row g-4 justify-content-center">
 
         <!-- Etudiant -->
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12 col-md-5 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/listEtudiants')">
             <div class="dash-card-top blue">
               <div class="dash-card-icon">
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Universite -->
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12 col-md-5 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/universites')">
             <div class="dash-card-top indigo">
               <div class="dash-card-icon">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Foyer -->
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12 col-md-5 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/foyers')">
             <div class="dash-card-top teal">
               <div class="dash-card-icon">
@@ -95,8 +95,8 @@
           </div>
         </div>
         <!-- Réservations -->
-         <div class="row g-4 justify-content-center mt-2"></div>
-          <div class="col-12 col-md-4 ">
+         <div class="row g-4 justify-content-center ">
+          <div class="col-12 col-md-5 col-md-3">
             <div class="dash-module-card" @click="$router.push('/reservations')">
 
               <div class="dash-card-top blue">
@@ -120,15 +120,14 @@
 
             </div>
           </div>
-
         <!-- Chatbot -->
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="col-12 col-md-5 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/chatbot')">
             <div class="dash-card-top violet">
               <div class="dash-card-icon">
                 <i class="bi bi-chat-dots-fill"></i>
               </div>
-              <span class="dash-card-num">04</span>
+              <span class="dash-card-num">05</span>
             </div>
             <div class="dash-card-body">
               <h3 class="dash-card-title">Assistant Chatbot</h3>
@@ -143,7 +142,7 @@
             </div>
           </div>
         </div>
-
+</div>
       </div>
 
       <!-- Footer -->

@@ -16,6 +16,13 @@
           </router-link>
         </div>
 
+        
+        <div class="text-end mb-4">
+          <router-link to="chambres-disponibles" class="btn btn-primary rounded-3">
+            Rechercher des chambres libres
+          </router-link>
+        </div>
+
         <!-- LOADING -->
         <div v-if="loading" class="text-center py-4">
           <div class="spinner-border text-primary"></div>
