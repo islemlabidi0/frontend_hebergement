@@ -47,6 +47,7 @@
               </td>
               <td>{{ u.foyer?.capaciteFoyer || '-' }}</td>
               <td>
+                <!-- Modifier -->
                 <router-link
                   :to="`/universites/update/${u.idUniversite}`"
                   class="btn btn-outline-warning btn-sm me-2"
@@ -54,6 +55,8 @@
                 >
                   <i class="bi bi-pencil"></i>
                 </router-link>
+
+                <!-- Affecter foyer (seulement si pas de foyer) -->
                 <router-link
                   v-if="!u.foyer"
                   :to="`/universites/affecter-foyer/${u.idUniversite}`"
@@ -62,6 +65,18 @@
                 >
                   <i class="bi bi-building-add"></i>
                 </router-link>
+
+                <!-- Désaffecter foyer (seulement si foyer existe) -->
+                <button
+                  v-if="u.foyer"
+                  class="btn btn-outline-secondary btn-sm me-2"
+                  @click="openDesaffecterModal(u.idUniversite, u.nomUniversite)"
+                  title="Désaffecter le foyer"
+                >
+                  <i class="bi bi-building-dash"></i>
+                </button>
+
+                <!-- Supprimer -->
                 <button
                   class="btn btn-outline-danger btn-sm"
                   @click="openDeleteModal(u.idUniversite, u.nomUniversite)"
@@ -114,6 +129,37 @@
       </div>
     </div>
 
+    <!-- DÉSAFFECTER CONFIRMATION MODAL -->
+    <div class="modal fade" tabindex="-1" ref="desaffecterModalRef">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+          <div class="modal-header border-0">
+            <h5 class="modal-title text-warning fw-bold">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              Désaffecter le foyer
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center py-4">
+            <i class="bi bi-building-dash text-warning" style="font-size: 3rem;"></i>
+            <p class="fs-5 mt-3">
+              Voulez-vous vraiment désaffecter le foyer de l'université <br>
+              <strong class="text-warning">{{ universiteToDesaffecter.nom }}</strong> ?
+            </p>
+          </div>
+          <div class="modal-footer border-0 justify-content-center">
+            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+              Annuler
+            </button>
+            <button type="button" class="btn btn-warning px-4" @click="confirmDesaffecter" :disabled="desaffecting">
+              <span v-if="desaffecting" class="spinner-border spinner-border-sm me-1"></span>
+              {{ desaffecting ? 'En cours...' : 'Désaffecter' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- SUCCESS MODAL -->
     <div class="modal fade" tabindex="-1" ref="successModalRef">
       <div class="modal-dialog modal-dialog-centered">
@@ -127,9 +173,7 @@
           </div>
           <div class="modal-body text-center py-4">
             <i class="bi bi-building-check text-success" style="font-size: 3rem;"></i>
-            <p class="fs-5 mt-3">
-              Université supprimée avec succès
-            </p>
+            <p class="fs-5 mt-3">{{ successMessage }}</p>
           </div>
           <div class="modal-footer border-0 justify-content-center">
             <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">
@@ -140,7 +184,7 @@
       </div>
     </div>
 
-    <!-- ERROR MODAL - AMÉLIORÉ -->
+    <!-- ERROR MODAL -->
     <div class="modal fade" tabindex="-1" ref="errorModalRef">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-danger">
@@ -183,35 +227,39 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Modal } from 'bootstrap'
-import { getAllUniversites, deleteUniversite } from '../../services/universiteServices'
+import {
+  getAllUniversites,
+  deleteUniversite,
+  desaffecterFoyerAUniversite
+} from '../../services/universiteServices'
 import type { Universite } from '../../models/Universite'
 
 const router = useRouter()
 const universites = ref<Universite[]>([])
 const loading = ref(false)
 const deleting = ref(false)
+const desaffecting = ref(false)
 const errorMessage = ref('')
+const successMessage = ref('')
 
 const deleteModalRef = ref<HTMLElement | null>(null)
+const desaffecterModalRef = ref<HTMLElement | null>(null)
 const successModalRef = ref<HTMLElement | null>(null)
 const errorModalRef = ref<HTMLElement | null>(null)
 
 let deleteModal: Modal | null = null
+let desaffecterModal: Modal | null = null
 let successModal: Modal | null = null
 let errorModal: Modal | null = null
 
 const universiteToDelete = ref({ id: 0, nom: '' })
+const universiteToDesaffecter = ref({ id: 0, nom: '' })
 
 onMounted(() => {
-  if (deleteModalRef.value) {
-    deleteModal = new Modal(deleteModalRef.value)
-  }
-  if (successModalRef.value) {
-    successModal = new Modal(successModalRef.value)
-  }
-  if (errorModalRef.value) {
-    errorModal = new Modal(errorModalRef.value)
-  }
+  if (deleteModalRef.value) deleteModal = new Modal(deleteModalRef.value)
+  if (desaffecterModalRef.value) desaffecterModal = new Modal(desaffecterModalRef.value)
+  if (successModalRef.value) successModal = new Modal(successModalRef.value)
+  if (errorModalRef.value) errorModal = new Modal(errorModalRef.value)
   fetchData()
 })
 
@@ -239,21 +287,43 @@ const confirmDelete = async () => {
     await deleteUniversite(universiteToDelete.value.id)
     deleteModal?.hide()
     await fetchData()
+    successMessage.value = 'Université supprimée avec succès'
     successModal?.show()
   } catch (err: any) {
     deleteModal?.hide()
-
-    // Message personnalisé selon l'erreur
     if (err.response?.status === 409 || err.message?.includes('foreign key')) {
       errorMessage.value = "Cette université ne peut pas être supprimée car des étudiants y sont actuellement inscrits."
     } else {
       errorMessage.value = err.response?.data?.message || "Une erreur est survenue lors de la suppression."
     }
-
     errorModal?.show()
     console.error(err)
   } finally {
     deleting.value = false
+  }
+}
+
+const openDesaffecterModal = (id: number | undefined, nom: string) => {
+  if (!id) return
+  universiteToDesaffecter.value = { id, nom }
+  desaffecterModal?.show()
+}
+
+const confirmDesaffecter = async () => {
+  desaffecting.value = true
+  try {
+    await desaffecterFoyerAUniversite(universiteToDesaffecter.value.id)
+    desaffecterModal?.hide()
+    await fetchData()
+    successMessage.value = 'Foyer désaffecté avec succès'
+    successModal?.show()
+  } catch (err: any) {
+    desaffecterModal?.hide()
+    errorMessage.value = err.response?.data?.message || "Une erreur est survenue lors de la désaffectation."
+    errorModal?.show()
+    console.error(err)
+  } finally {
+    desaffecting.value = false
   }
 }
 

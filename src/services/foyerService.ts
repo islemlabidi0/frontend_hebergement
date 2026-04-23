@@ -8,13 +8,27 @@ export interface Foyer {
   capaciteFoyer: number;
 }
 
-export const getAllFoyers = () => axios.get(API_URL + "/all");
+export interface Chambre {
+  numeroChambre: number;
+  type: "SIMPLE" | "DOUBLE" | "TRIPLE";
+}
+
+export const getAllFoyers = () =>
+  axios.get<Foyer[]>(API_URL + "/all");
+
+export const searchFoyers = (keyword: string) =>
+  axios.get<Foyer[]>(`${API_URL}/search`, { params: { keyword } });
 
 export const addFoyer = (foyer: Foyer) =>
-  axios.post(API_URL + "/add", foyer);
+  axios.post<Foyer>(API_URL + "/add", foyer);
 
 export const updateFoyer = (foyer: Foyer) =>
-  axios.put(API_URL + "/update", foyer);
+  axios.put<Foyer>(API_URL + "/update", foyer);
 
 export const deleteFoyer = (id: number) =>
   axios.delete(`${API_URL}/${id}`);
+
+export const getChambresDisponibles = (nomFoyer: string, type: string) =>
+  axios.get<Chambre[]>(`${API_URL}/chambresDisponibles`, {
+    params: { nomFoyer, type }
+  });

@@ -40,3 +40,7 @@ export const affecterFoyerAUniversite = (idFoyer: number, nomUniversite: string)
     { params: { idFoyer, nomUniversite } }
   )
 }
+
+export const desaffecterFoyerAUniversite = (idUniversite: number) => {
+  return axios.put(`${API_URL}/desaffecterFoyerAUniversite/${idUniversite}`)
+}

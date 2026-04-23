@@ -75,6 +75,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Foyer.vue')
       },
 
+       {
+          path: 'chambres-disponibles',
+          name: 'chambres-disponibles',
+          component: () => import('../views/ChambresDisponiblesView.vue')
+},      
+
       // Blocs
       {
         path: 'blocs',
@@ -95,6 +101,12 @@ const routes: Array<RouteRecordRaw> = [
         path: 'reservations',
         name: 'reservations-list',
         component: () => import('../components/Reservation/ReservationsList.vue')
+
+      // ✅ Chatbot — page dédiée dans le layout (avec navbar)
+      {
+        path: 'chatbot',           // ← No leading slash: becomes /chatbot
+        name: 'chatbot',
+        component: () => import('../components/chatbot/Chatbot.vue')
       }
     ]
   }

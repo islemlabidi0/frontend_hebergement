@@ -36,7 +36,7 @@
       <div class="row g-4 justify-content-center">
 
         <!-- Etudiant -->
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/listEtudiants')">
             <div class="dash-card-top blue">
               <div class="dash-card-icon">
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Universite -->
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/universites')">
             <div class="dash-card-top indigo">
               <div class="dash-card-icon">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Foyer -->
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 col-lg-3">
           <div class="dash-module-card" @click="$router.push('/foyers')">
             <div class="dash-card-top teal">
               <div class="dash-card-icon">
@@ -120,6 +120,29 @@
 
             </div>
           </div>
+
+        <!-- Chatbot -->
+        <div class="col-12 col-md-6 col-lg-3">
+          <div class="dash-module-card" @click="$router.push('/chatbot')">
+            <div class="dash-card-top violet">
+              <div class="dash-card-icon">
+                <i class="bi bi-chat-dots-fill"></i>
+              </div>
+              <span class="dash-card-num">04</span>
+            </div>
+            <div class="dash-card-body">
+              <h3 class="dash-card-title">Assistant Chatbot</h3>
+              <div class="dash-card-badge">
+                <i class="bi bi-stars"></i> IA
+              </div>
+              <p class="dash-card-desc">Posez vos questions a l'assistant IA pour une aide rapide et intelligente.</p>
+              <router-link to="/chatbot" class="dash-card-btn violet-btn">
+                Acceder au module
+                <i class="bi bi-arrow-right"></i>
+              </router-link>
+            </div>
+          </div>
+        </div>
 
       </div>
 
@@ -278,6 +301,7 @@ const router = useRouter()
 .dash-card-top.blue   { background: linear-gradient(135deg, #1a56db, #2563eb); }
 .dash-card-top.indigo { background: linear-gradient(135deg, #4338ca, #6366f1); }
 .dash-card-top.teal   { background: linear-gradient(135deg, #0d9488, #14b8a6); }
+.dash-card-top.violet { background: linear-gradient(135deg, #7c3aed, #a855f7); }
 
 .dash-card-icon {
   width: 52px;
@@ -315,6 +339,22 @@ const router = useRouter()
   color: #0f172a;
   margin: 0;
   line-height: 1.3;
+}
+
+/* IA Badge for chatbot card */
+.dash-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f3e8ff;
+  color: #7c3aed;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+  border: 1px solid #e9d5ff;
 }
 
 .dash-card-desc {
@@ -370,6 +410,17 @@ const router = useRouter()
   background: #0d9488;
   color: #ffffff;
   border-color: #0d9488;
+}
+
+.violet-btn {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border: 1.5px solid #d8b4fe;
+}
+.violet-btn:hover {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
 }
 
 /* ── Footer ───────────────────────────────── */
