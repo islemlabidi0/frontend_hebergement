@@ -29,6 +29,10 @@
           <i class="bi bi-grid-3x3-gap-fill"></i>
           <span>Blocs</span>
         </router-link>
+          <router-link to="/reservations" class="nav-link-item" active-class="active">
+          <i class="bi bi-grid-3x3-gap-fill"></i>
+          <span>Réservations</span>
+        </router-link>
       </div>
 
       <!-- Right actions -->
@@ -60,6 +64,9 @@
         </router-link>
         <router-link to="/blocs" class="mobile-link" @click="menuOpen = false">
           <i class="bi bi-grid-3x3-gap-fill"></i> Blocs
+        </router-link>
+          <router-link to="/reservations" class="mobile-link" @click="menuOpen = false">
+          <i class="bi bi-grid-3x3-gap-fill"></i> Réservations
         </router-link>
         <div class="mobile-divider"></div>
         <router-link to="/dashboard" class="mobile-link dashboard" @click="menuOpen = false">

@@ -87,6 +87,20 @@ const routes: Array<RouteRecordRaw> = [
         name: 'blocs',
         component: BlocView
       },
+      //Routes pour réservations
+      {
+        path: 'reservations/add',
+        name: 'reservations-add',
+        component: () => import('../components/Reservation/AddReservation.vue')
+      },{
+        path: 'reservations/BYAU',
+        name: 'reservations-by-au',
+        component: () => import('../components/Reservation/GetReservationsByAU.vue')
+      },
+      {
+        path: 'reservations',
+        name: 'reservations-list',
+        component: () => import('../components/Reservation/ReservationsList.vue')
 
       // ✅ Chatbot — page dédiée dans le layout (avec navbar)
       {
