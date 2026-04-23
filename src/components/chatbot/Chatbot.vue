@@ -33,7 +33,7 @@
         <div class="sidebar-footer">
           <div class="model-badge">
             <span class="model-dot"></span>
-            grok-3-mini · xAI
+           llama3.2:1b · Ollama
           </div>
         </div>
       </aside>
